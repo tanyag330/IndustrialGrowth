@@ -1,0 +1,42 @@
+# putting data on hdfs architecture
+hadoop fs -put /home/cloudera/Desktop/Data.csv /user/cloudera/newdata.txt;
+
+# showing Data file on host
+http://localhost:50070/explorer.html#/user/cloudera
+
+# opening pig
+pig -x local;
+
+# Loading full data in a variable
+variable = Load '/home/cloudera/Desktop/Data.csv' using PigStorage(',') as (CompanyName:chararray,CompanyNumber:int,RegAddressCareOf:chararray,RegAddressPOBox:chararray,RegAddressAddressLine1:chararray,RegAddressAddressLine2:chararray,RegAddressPostTown:chararray,RegAddressCounty:chararray,RegAddressCountry:chararray,RegAddressPostCode:chararray,CompanyCategory:chararray,CompanyStatus:chararray,CountryOfOrigin:chararray,DissolutionDate:chararray,IncorporationDate:chararray,AccountsAccountRefDay:int,AccountsAccountRefMonth:chararray,AccountsNextDueDate:chararray,AccountsLastMadeUpDate:chararray,AccountsAccountCategory:chararray,ReturnsNextDueDate:chararray,ReturnsLastMadeUpDate:chararray,MortgagesNumMortCharges:int,MortgagesNumMortOutstanding:int,MortgagesNumMortPartSatisfied:chararray,MortgagesNumMortSatisfied:chararray,SICCodeSicText_1:chararray,SICCodeSicText_2:chararray,SICCodeSicText_3:chararray,SICCodeSicText_4:chararray,LimitedPartnershipsNumGenPartners:int,LimitedPartnershipsNumLimPartners:int,URI:chararray,PreviousName_1CONDATE:chararray,PreviousName_1CompanyName:chararray,PreviousName_2CONDATE:chararray,PreviousName_2CompanyName:chararray,PreviousName_3CONDATE:chararray,PreviousName_3CompanyName:chararray,PreviousName_4CONDATE:chararray,PreviousName_4CompanyName:chararray,PreviousName_5CONDATE:chararray,PreviousName_5CompanyName:chararray,PreviousName_6CONDATE:chararray,PreviousName_6CompanyName:chararray,PreviousName_7CONDATE:chararray,PreviousName_7CompanyName:chararray,PreviousName_8CONDATE:chararray,PreviousName_8CompanyName:chararray,PreviousName_9CONDATE:chararray,PreviousName_9CompanyName:chararray,PreviousName_10CONDATE:chararray,PreviousName_10CompanyName:chararray,ConfStmtNextDueDate:chararray,ConfStmtLastMadeUpDate:chararray);
+
+# loading csv file into a variable
+var = Load '/home/cloudera/Desktop/Date.csv' using PigStorage(',') as (str:chararray,date:chararray);
+
+# displaying the variable
+dump var;
+
+# converting the dates into datetime format
+convert = foreach var generate ToDate(date, 'dd/MM/yyyy') as (IncorporationDate:datetime);
+
+# displaying the dates
+dump convert;
+
+# filtering the dates in a particular range > year 2010
+fill = filter convert by IncorporationDate >= (datetime)ToDate('2010-01-01', 'yyyy-MM-dd');
+
+# displaying the filtered out dates
+dump fill;
+
+# counting the filtered out dates to plot the graph
+counter = foreach (group fill all) generate COUNT(fill);
+
+# displaying the count
+dump counter;
+
+# results
+2680133 - >2010
+3231448 - >2005
+3596533 - >2000
+491860 - <2000
+1475505 - >2015
