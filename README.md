@@ -1,1 +1,2 @@
 # IndustrialGrowth
+This project utilizes the results of MapReduce & HDFS architecture to analyze the IT sector in India. Processing of data of registered companies being a heavy task for normal processors is being processed using Hadoop technology in this project which has the capability to process huge datasets using Cloudera and PigScripts. Results fetched after analyzation are being utilized to plot the structure of IT sector which would have been costly and difficult using normal processors and memory architecture. 
